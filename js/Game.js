@@ -2,19 +2,30 @@
  * Project 4 - OOP Game App
  * Game.js */
 
- 
-
-
 class Game {
     constructor () {
         this.missed = 0;
-        this.phrases = ["basketball","Helo World","Point High","Running","Comming Home"];
+        this.phrases = ["basketball","Helo World","Demon Slayer","Running","Green","Friends","Dark"];
         this.activePhrase = null;
     }
 
     get getRandomPhrase () {
         const randomIndex = Math.floor(Math.random() * this.phrases.length);
         return this.phrases[randomIndex];
+    }
+
+    confirmKey (key) {
+
+        if (this.activePhrase.checkLetter(key.textContent)) {
+            key.className = "chosen";
+            key.disabled = true;
+            this.activePhrase.showMatchedLetter(key.textContent);
+            this.checkForWin();
+            return 
+        }
+        key.className = "wrong";
+        key.disabled = true;
+        this.removeLife();
     }
 
     removeLife () {
@@ -40,22 +51,16 @@ class Game {
     }
 
     handleIteraction (e) {
-        let letter = e.target;
 
         if (e.target.tagName === "BUTTON"){
-
-            if (this.activePhrase.checkLetter(letter.textContent)) {
-                e.target.className = "chosen";
-                e.target.disabled = true;
-                this.activePhrase.showMatchedLetter(letter.textContent);
-                this.checkForWin();
-                return 
-            }
-            e.target.className = "wrong";
-            e.target.disabled = true;
-            this.removeLife();
-
+            let key = e.target;
+            this.confirmKey(key)
         }
+    }
+
+    handleKeyDown (key) {
+        const keyPressed = document.getElementById(key);
+        this.confirmKey(keyPressed);
     }
 
     startGame () {

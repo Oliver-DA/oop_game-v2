@@ -16,6 +16,7 @@ function reset () {
     lives.forEach(live => live.firstElementChild.src = "images/liveHeart.png")
 }
 
+
 let game;
 const startButton = document.getElementById("btn__reset");
 const keyBoard = document.getElementById("qwerty");
@@ -30,5 +31,9 @@ startButton.addEventListener('click',() => {
 
 keyBoard.addEventListener("click",e => {
     game.handleIteraction(e)
-})
+});
+
+document.addEventListener("keydown", e => {
+    game.handleKeyDown(e.key);
+});
 
