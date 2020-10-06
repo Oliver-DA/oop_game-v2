@@ -14,20 +14,6 @@ class Game {
         return this.phrases[randomIndex];
     }
 
-    confirmKey (key) {
-
-        if (this.activePhrase.checkLetter(key.textContent)) {
-            key.className = "chosen";
-            key.disabled = true;
-            this.activePhrase.showMatchedLetter(key.textContent);
-            this.checkForWin();
-            return 
-        }
-        key.className = "wrong";
-        key.disabled = true;
-        this.removeLife();
-    }
-
     removeLife () {
         const lives = document.querySelectorAll("#scoreboard ol li");
         lives[this.missed].firstElementChild.src = "images/lostHeart.png";
@@ -37,30 +23,34 @@ class Game {
     }
 
     checkForWin () {
-
        const revealed = document.querySelectorAll("#phrase ul li.show");
        const space = document.querySelectorAll("#phrase ul li.space");
-
-        if (revealed.length+space.length === this.activePhrase.phrase.length) {
-            
-           setTimeout(() => {
-               this.gameOver("win")
-           },500)
-        }
+       
+       return revealed.length + space.length === this.activePhrase.phrase.length 
         
     }
 
-    handleIteraction (e) {
+    handleInteraction (key) {
+        const overlay = document.querySelector("#overlay");
 
-        if (e.target.tagName === "BUTTON"){
-            let key = e.target;
-            this.confirmKey(key)
+        if (key.tagName === "BUTTON" && overlay.style.display === "none"){
+
+            if (this.activePhrase.checkLetter(key.textContent)) {
+
+                key.className = "chosen";
+                key.disabled = true;
+                this.activePhrase.showMatchedLetter(key.textContent);
+                
+                this.checkForWin() ? setTimeout(() => {this.gameOver("win")},500) : null;
+
+            } else if (!key.disabled) {
+
+                key.className = "wrong";
+                key.disabled = true;
+                this.removeLife();
+            }
+
         }
-    }
-
-    handleKeyDown (key) {
-        const keyPressed = document.getElementById(key);
-        this.confirmKey(keyPressed);
     }
 
     startGame () {
@@ -76,15 +66,13 @@ class Game {
         const message = overlay.querySelector("h1");
 
         if (status === "win") {
-            message.className = "win";
-            message.textContent = "Congrast! You have guessed the word!";
-            return
+            overlay.className = status;
+            message.textContent = "Congrats! You have guessed the word!";
+            
         } else {
-            message.className = "lose";
-            message.textContent = "You've run out of lives Good luck, next Time!";
-            return
+            overlay.className = status;
+            message.textContent = "You've run out of lives Good luck next Time!";
+            
         }
-        
-
     }
 } 

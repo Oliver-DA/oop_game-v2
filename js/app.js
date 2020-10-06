@@ -30,10 +30,12 @@ startButton.addEventListener('click',() => {
 });
 
 keyBoard.addEventListener("click",e => {
-    game.handleIteraction(e)
+    let key = e.target;
+    game ? game.handleInteraction(key) : null
 });
 
-document.addEventListener("keydown", e => {
-    game.handleKeyDown(e.key);
+document.addEventListener("keyup", e => {
+    const keyPressed = document.getElementById(e.key.toLocaleLowerCase());
+    
+    game && /[a-z]/g.test(keyPressed) && keyPressed !== null ? game.handleInteraction(keyPressed):null
 });
-
