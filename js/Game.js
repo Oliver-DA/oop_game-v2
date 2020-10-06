@@ -1,7 +1,3 @@
-/* Treehouse FSJS Techdegree
- * Project 4 - OOP Game App
- * Game.js */
-
 class Game {
     constructor () {
         this.missed = 0;
@@ -9,11 +5,13 @@ class Game {
         this.activePhrase = null;
     }
 
+    //Gets a randomNumber(randomIndex) and returns it's index value on this.phrases
     get getRandomPhrase () {
         const randomIndex = Math.floor(Math.random() * this.phrases.length);
         return this.phrases[randomIndex];
     }
 
+    //Removes a life an uses this.missed value to access the heart on turn.
     removeLife () {
         const lives = document.querySelectorAll("#scoreboard ol li");
         lives[this.missed].firstElementChild.src = "images/lostHeart.png";
@@ -22,6 +20,7 @@ class Game {
         this.missed === 5 ? setTimeout(this.gameOver,500) : null;
     }
 
+    //Checks the length of the displayed frase plus spaces and compares it to the ones that were already revealed.
     checkForWin () {
        const revealed = document.querySelectorAll("#phrase ul li.show");
        const space = document.querySelectorAll("#phrase ul li.space");
@@ -41,8 +40,10 @@ class Game {
                 key.disabled = true;
                 this.activePhrase.showMatchedLetter(key.textContent);
                 
+                //If checkForWin returns true call game over in half a second.
                 this.checkForWin() ? setTimeout(() => {this.gameOver("win")},500) : null;
 
+                //this prevents the keyboard from taking lives even after the key value was set to "wrong".
             } else if (!key.disabled) {
 
                 key.className = "wrong";
@@ -55,15 +56,17 @@ class Game {
 
     startGame () {
         document.getElementById('overlay').style.display = 'none';
+        //Assings a new Phrase Object to activePhrase
         this.activePhrase = new Phrase(this.getRandomPhrase);
+        //Display the phrase on the page. (hidden)
         this.activePhrase.addPhraseToDisplay();
     }
 
+    //Displays a winning or lossing message to the screen.
     gameOver (status = "lose") {
         const overlay = document.getElementById('overlay');
-        overlay.style.display = "block";
-
         const message = overlay.querySelector("h1");
+        overlay.style.display = "flex";
 
         if (status === "win") {
             overlay.className = status;
