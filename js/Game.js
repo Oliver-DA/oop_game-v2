@@ -1,18 +1,27 @@
 class Game {
+
     constructor () {
         this.missed = 0;
-        this.phrases = ["basketball","Helo World","Demon Slayer","Running","Green","Friends","Dark"];
+        this.phrases = [
+            new Phrase ("basketball"),
+            new Phrase ("Hello World"),
+            new Phrase ("code with treehouse"),
+            new Phrase ("apples"),
+            new Phrase ("Friends"),
+            new Phrase ("Data Base")];
         this.activePhrase = null;
     }
 
     //Gets a randomNumber(randomIndex) and returns it's index value on this.phrases
     get getRandomPhrase () {
+        
         const randomIndex = Math.floor(Math.random() * this.phrases.length);
         return this.phrases[randomIndex];
     }
 
     //Removes a life an uses this.missed value to access the heart on turn.
     removeLife () {
+
         const lives = document.querySelectorAll("#scoreboard ol li");
         lives[this.missed].firstElementChild.src = "images/lostHeart.png";
         this.missed += 1;
@@ -55,24 +64,28 @@ class Game {
     }
 
     startGame () {
+
         document.getElementById('overlay').style.display = 'none';
         //Assings a new Phrase Object to activePhrase
-        this.activePhrase = new Phrase(this.getRandomPhrase);
+        this.activePhrase = this.getRandomPhrase;
         //Display the phrase on the page. (hidden)
         this.activePhrase.addPhraseToDisplay();
     }
 
     //Displays a winning or lossing message to the screen.
     gameOver (status = "lose") {
+
         const overlay = document.getElementById('overlay');
         const message = overlay.querySelector("h1");
         overlay.style.display = "flex";
 
         if (status === "win") {
+
             overlay.className = status;
             message.textContent = "Congrats! You have guessed the word!";
             
         } else {
+
             overlay.className = status;
             message.textContent = "You've run out of lives Good luck next Time!";
             
